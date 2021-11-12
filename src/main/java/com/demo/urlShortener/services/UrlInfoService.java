@@ -47,6 +47,10 @@ public class UrlInfoService {
         if(StringUtil.isNullOrEmpty(shortUrl)){
             //First create a short url from long url
             shortUrl = DOMAIN + uniqueStringGenerator();
+            
+            // This logic is wrong. If redis does not have the long to short url mapping, that does not mean you will simply generate a new one. 
+            // You would need to check in mysql also because it may happen the url mapping is present in db but in redis it has expired.
+            // Correct flow should be check in redis, then in db, if not found create a new url add in mysql and then in redis
 
             //Insert into DB amd return
             UrlInfo urlInfo = UrlInfo.builder()
